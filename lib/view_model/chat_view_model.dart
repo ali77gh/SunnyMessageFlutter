@@ -1,6 +1,6 @@
 
-import 'package:ptopwebrtc/model/contact.dart';
-import 'package:ptopwebrtc/tools/obsarvable.dart';
+import 'package:flutter_client/model/contact.dart';
+import 'package:flutter_client/tools/obsarvable.dart';
 
 import '../model/message.dart';
 

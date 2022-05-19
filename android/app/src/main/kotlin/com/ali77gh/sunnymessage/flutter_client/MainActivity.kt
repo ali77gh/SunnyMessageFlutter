@@ -1,4 +1,4 @@
-package com.ali77gh.p2pwebrtc.ptopwebrtc
+package com.ali77gh.sunnymessage.flutter_client
 
 import io.flutter.embedding.android.FlutterActivity
 
