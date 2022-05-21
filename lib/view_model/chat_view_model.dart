@@ -10,6 +10,12 @@ class ChatViewModel{
   static var messages = Observable<List<Message>>([]);
   static var inputMessage = Observable<String>("");
 
+  static void unSelectContact(){
+    contact.value = null;
+  }
+
+  static bool get isContactSelected => contact.value!=null;
+
   static void sendMessage(){
 
     if(inputMessage.value == "") return; // TODO validate and disable and enable send button
