@@ -26,15 +26,22 @@ class FakeData{
   }
 
   static void loadChat(){
-    Timer(const Duration(milliseconds: 3000),(){
-      ChatViewModel.messages.value.add(Message("1", DateTime.now().millisecondsSinceEpoch, false));
-      ChatViewModel.messages.value.add(Message("2", DateTime.now().millisecondsSinceEpoch, false));
-      ChatViewModel.messages.notifyAll();
-      Timer(const Duration(milliseconds: 3000),(){
-        ChatViewModel.messages.value.add(Message("3", DateTime.now().millisecondsSinceEpoch, true));
-        ChatViewModel.messages.value.add(Message("4", DateTime.now().millisecondsSinceEpoch, false));
-        ChatViewModel.messages.notifyAll();
-      });
-    });
+
+    ChatViewModel.messages.value.add(Message("سلام",0,true,false));
+    ChatViewModel.messages.value.add(Message("سلام",0,true,true));
+    ChatViewModel.messages.value.add(Message("خوبی؟",0,true,false));
+    ChatViewModel.messages.value.add(Message("عالی ام",0,true,true));
+    ChatViewModel.messages.value.add(Message("ای بابا",0,true,false));
+    ChatViewModel.messages.value.add(Message("english harf bezanim yekam",0,true,false));
+    ChatViewModel.messages.value.add(Message("english harf bezanim yekammmmmm",0,true,true));
+    ChatViewModel.messages.value.add(Message("chera inja enghadr saketeeeee?!",0,false,true));
+    ChatViewModel.messages.value.add(Message("سلام",0,true,false));
+    ChatViewModel.messages.value.add(Message("سلام",0,true,true));
+    ChatViewModel.messages.value.add(Message("خوبی؟",0,true,false));
+    ChatViewModel.messages.value.add(Message("عالی ام",0,true,true));
+    ChatViewModel.messages.value.add(Message("ای بابا",0,true,false));
+    ChatViewModel.messages.value.add(Message("english harf bezanim yekam",0,true,false));
+    ChatViewModel.messages.value.add(Message("english harf bezanim yekammmmmm",0,true,true));
+    ChatViewModel.messages.value.add(Message("chera inja enghadr saketeeeee?!",0,false,true));
   }
 }

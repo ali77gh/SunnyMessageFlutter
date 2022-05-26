@@ -20,7 +20,7 @@ class ChatViewModel{
 
     if(inputMessage.value == "") return; // TODO validate and disable and enable send button
 
-    var msg = Message(inputMessage.value, DateTime.now().millisecondsSinceEpoch, false);
+    var msg = Message(inputMessage.value, DateTime.now().millisecondsSinceEpoch, false, true);
     messages.value.add(msg);
     messages.notifyAll();
     // TODO send with Webrtc

@@ -38,6 +38,7 @@ class ContactListLayoutState extends State<ContactListLayout> {
 
   Widget logoAndName(){
     return Container(
+      height: AppSizes.topBarSize,
       color: AppTheme.primary,
         padding: const EdgeInsets.all(4),
         child: Row(
@@ -63,7 +64,7 @@ class ContactListLayoutState extends State<ContactListLayout> {
 
   Widget list(){
     return Expanded(
-      child: Column(
+      child: ListView(
         children: ContactViewModel.sorted_contacts.map((e) => listItem(e)).toList(),
       ),
     );

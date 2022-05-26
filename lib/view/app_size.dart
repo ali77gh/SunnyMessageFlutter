@@ -34,7 +34,7 @@ class AppSizes{
     }
   }
 
-  static double get topBarSize => 25;
+  static double get topBarSize => 80;
 
   static double get sidePanelSize => deviceType==MOBILE ? width : width *.3;
 

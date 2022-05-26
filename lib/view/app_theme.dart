@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 class AppTheme{
   static const Color primary = Color.fromARGB(255, 79, 152, 226);
-  static const Color secondary = Color.fromARGB(255, 181, 99, 0);
+  static const Color secondary = Color.fromARGB(255, 136, 179, 223);
 
   static const Color text_sharp = Color.fromARGB(255, 0, 0, 0);
   static const Color text_normal   = Color.fromARGB(255, 50, 50, 50);
