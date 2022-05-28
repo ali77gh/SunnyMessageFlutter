@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_client/model/contact.dart';
 import 'package:flutter_client/view/app_size.dart';
 import 'package:flutter_client/view/app_theme.dart';
+import 'package:flutter_client/view/common/add_room_layout.dart';
 import 'package:flutter_client/view_model/chat_view_model.dart';
 import 'package:flutter_client/view_model/contact_view_model.dart';
-import 'package:flutter_client/view_model/create_room_view_model.dart';
-import 'package:flutter_client/view_model/join_room_view_model.dart';
+import 'package:flutter_client/view_model/add_room_view_model.dart';
 
 
 class ContactListLayout extends StatefulWidget {
@@ -16,8 +16,9 @@ class ContactListLayout extends StatefulWidget {
 class ContactListLayoutState extends State<ContactListLayout> {
 
   ContactListLayoutState(){
-    ContactViewModel.contacts.subscribe((){ setState(() { });});
-    ChatViewModel.contact.subscribe((){ setState(() { });});
+    ContactViewModel.contacts.subscribe((){ setState(() { }); });
+    ChatViewModel.contact.subscribe((){ setState(() { }); });
+    AddRoomViewModel.isVisible.subscribe((){ setState(() { });});
   }
 
   @override
@@ -30,7 +31,7 @@ class ContactListLayoutState extends State<ContactListLayout> {
           logoAndName(),
           const SizedBox(height: 20),
           list(),
-          buttons()
+          buttonsOrDialogs()
         ],
       ),
     );
@@ -70,6 +71,14 @@ class ContactListLayoutState extends State<ContactListLayout> {
     );
   }
 
+  Widget buttonsOrDialogs(){
+    if(AddRoomViewModel.isVisible.value){
+      return AddRoomLayout();
+    } else {
+      return buttons();
+    }
+  }
+
   Widget buttons(){
     return Container(
       padding: const EdgeInsets.only(bottom: 20),
@@ -78,7 +87,7 @@ class ContactListLayoutState extends State<ContactListLayout> {
             const Spacer(),
             FloatingActionButton(
                 onPressed: (){
-                  CreateRoomViewModel.show();
+                  AddRoomViewModel.show(AddRoomViewModel.MODE_CREATE);
                 },
                 child: Image.asset(
                   height: AppSizes.fontLarge,
@@ -89,7 +98,7 @@ class ContactListLayoutState extends State<ContactListLayout> {
             const Spacer(),
             FloatingActionButton(
                 onPressed: (){
-                  JoinRoomViewModel.show();
+                  AddRoomViewModel.show(AddRoomViewModel.MODE_JOIN);
                 },
                 child: Image.asset(
                   height: AppSizes.fontLarge,
@@ -106,7 +115,7 @@ class ContactListLayoutState extends State<ContactListLayout> {
   Widget listItem(Contact contact){
 
     bool isSelected(){
-      if(ChatViewModel.contact.value==null) return false;
+      if(ChatViewModel.contact.value == null) return false;
       return contact.roomId==ChatViewModel.contact.value!.roomId;
     }
 

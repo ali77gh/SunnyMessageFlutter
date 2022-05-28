@@ -1,4 +1,5 @@
 
+import 'package:flutter/widgets.dart';
 import 'package:flutter_client/model/contact.dart';
 import 'package:flutter_client/tools/obsarvable.dart';
 
@@ -9,6 +10,8 @@ class ChatViewModel{
   static var contact = Observable<Contact?>(null);
   static var messages = Observable<List<Message>>([]);
   static var inputMessage = Observable<String>("");
+
+  static var tec = TextEditingController();
 
   static void unSelectContact(){
     contact.value = null;
@@ -23,6 +26,8 @@ class ChatViewModel{
     var msg = Message(inputMessage.value, DateTime.now().millisecondsSinceEpoch, false, true);
     messages.value.add(msg);
     messages.notifyAll();
+    inputMessage.value = "";
+    tec.clear();
     // TODO send with Webrtc
     // TODO add to database
   }

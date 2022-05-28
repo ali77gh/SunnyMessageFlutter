@@ -127,7 +127,6 @@ class ChatLayoutState extends State<ChatLayout> {
     );
   }
 
-
   Widget inputText(){
     return Container(
         margin: const EdgeInsets.all(5),
@@ -138,7 +137,9 @@ class ChatLayoutState extends State<ChatLayout> {
                 minLines: 1,
                 decoration: const InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: "Message"),
+                    labelText: "Message"
+                ),
+                controller: ChatViewModel.tec,
                 onChanged: (text){
                   ChatViewModel.inputMessage.value = text;
                 },
