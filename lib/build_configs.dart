@@ -2,5 +2,5 @@
 
 class BuildConfig{
 
-  static const bool fake_data = true;
+  static const bool fake_data = false;
 }

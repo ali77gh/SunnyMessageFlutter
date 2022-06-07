@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_client/build_configs.dart';
 import 'package:flutter_client/fake_data.dart';
+import 'package:flutter_client/repo/local/contact_repo.dart';
 import 'package:flutter_client/view/main_layout.dart';
+import 'package:flutter_client/view_model/contact_view_model.dart';
 
 void main() {
   // start services here
-  if(BuildConfig.fake_data) FakeData.load();
+  if(BuildConfig.fake_data) {
+    FakeData.load();
+  } else {
+    ContactRepo.init((){
+      ContactViewModel.contacts.value = ContactRepo.getAll();
+    });
+  }
   runApp(MyApp());
 }
 

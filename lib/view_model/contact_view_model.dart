@@ -1,5 +1,6 @@
 
 import 'package:flutter_client/model/contact.dart';
+import 'package:flutter_client/repo/local/contact_repo.dart';
 import 'package:flutter_client/tools/obsarvable.dart';
 
 class ContactViewModel{
@@ -13,7 +14,7 @@ class ContactViewModel{
   static void add(Contact contact){
     contacts.value.add(contact);
     contacts.notifyAll();
-    //TODO add to database
+    ContactRepo.add(contact);
   }
 
   static List<Contact> get sorted_contacts{
@@ -24,16 +25,13 @@ class ContactViewModel{
     var index = contacts.value.indexWhere((element) => element.roomId==contact.roomId);
     contacts.value[index] = contact;
     contacts.notifyAll();
+    ContactRepo.update(contact);
   }
 
 
   static void remove(String contactId){
     contacts.value.where((element) => element.roomId != contactId);
     contacts.notifyAll();
-    //TODO remove from database
-  }
-
-  static void load(){
-    //TODO load from database
+    ContactRepo.removeById(contactId);
   }
 }

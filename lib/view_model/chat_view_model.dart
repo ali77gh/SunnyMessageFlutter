@@ -1,6 +1,7 @@
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_client/model/contact.dart';
+import 'package:flutter_client/repo/local/message_repo.dart';
 import 'package:flutter_client/tools/obsarvable.dart';
 
 import '../model/message.dart';
@@ -29,7 +30,7 @@ class ChatViewModel{
     inputMessage.value = "";
     tec.clear();
     // TODO send with Webrtc
-    // TODO add to database
+    MessageRepo.add(contact.value!.roomId, msg);
   }
 
   /*
@@ -38,13 +39,13 @@ class ChatViewModel{
   static void onNewMessage(Message message){
     messages.value.add(message);
     messages.notifyAll();
-    // TODO add to database
+    MessageRepo.add(contact.value!.roomId, message);
   }
 
   static void load(Contact contact){
     ChatViewModel.contact.value = contact;
     // load messages
-    //TODO load from database
+    messages.value = MessageRepo.getAll(contact.roomId);
   }
 
   static void onInputMessageChange(String msg){

@@ -56,7 +56,7 @@ class AddRoomLayoutState extends State<AddRoomLayout> {
             if(AddRoomViewModel.isValid.value)
               TextButton(
                   onPressed: (){
-                    AddRoomViewModel.close();
+                    AddRoomViewModel.save();
                   },
                   child: const Text("Add")
               ),

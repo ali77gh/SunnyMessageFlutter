@@ -24,6 +24,7 @@ class AddRoomViewModel{
   static void save(){
     var contact = Contact(name.value, roomId.value, false);
     ContactViewModel.add(contact);
+    close();
   }
 
   static close(){

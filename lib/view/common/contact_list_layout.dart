@@ -121,7 +121,8 @@ class ContactListLayoutState extends State<ContactListLayout> {
 
     return GestureDetector(
         onTap: (){
-          ChatViewModel.contact.value = contact;
+          // ChatViewModel.contact.value = contact;
+          ChatViewModel.load(contact);
         },
         child: Container(
             padding: const EdgeInsets.all(4),
