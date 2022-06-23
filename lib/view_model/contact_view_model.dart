@@ -17,6 +17,11 @@ class ContactViewModel{
     ContactRepo.add(contact);
   }
 
+  static void setOnlineStatus(String roomId,bool status){
+    contacts.value.singleWhere((element) => element.roomId==roomId).online = status;
+    contacts.notifyAll();
+  }
+
   static List<Contact> get sorted_contacts{
     return contacts.value; // TODO sort by last message time
   }

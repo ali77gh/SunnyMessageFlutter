@@ -3,7 +3,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_client/view_model/contact_view_model.dart';
-import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class WebSocketService{
@@ -20,12 +19,12 @@ class WebSocketService{
     reconnectLoop();
   }
   static connect(){
-    channel = IOWebSocketChannel.connect(
+    channel = WebSocketChannel.connect(
       Uri.parse(SERVER_ADDRESS),
-      pingInterval: const Duration(milliseconds: 10000)
     );
 
     channel?.stream.listen((message) {
+      print(message);
       onMessage(jsonDecode(message));
     }, onError: (e){
       print(e.toString());
@@ -72,10 +71,10 @@ class WebSocketService{
 
       switch(msg["action"]){
         case "online_status":
-
+          ContactViewModel.setOnlineStatus(msg["room_id"], msg["is_online"]);
           break;
         case "error":
-          //read "message" string
+          //read "message" string //TODO Toast error
           break;
       }
   }
