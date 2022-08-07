@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-const double WIDTH_MOBILE = 950;
+const double WIDTH_MOBILE = 550;
 
 const int PORTRATE = 0;
 const int LANDSCAPE = 1;

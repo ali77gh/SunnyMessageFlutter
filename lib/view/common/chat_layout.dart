@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_client/model/message.dart';
+import 'package:flutter_client/repo/remote/peer_to_peer_connection.dart';
 import 'package:flutter_client/view/app_size.dart';
 import 'package:flutter_client/view/app_theme.dart';
+import 'package:flutter_client/view/common/video_call_layout.dart';
 import 'package:flutter_client/view_model/chat_view_model.dart';
+import 'package:flutter_client/view_model/video_call_view_model.dart';
 
 
 class ChatLayout extends StatefulWidget {
@@ -18,17 +21,29 @@ class ChatLayoutState extends State<ChatLayout> {
     ChatViewModel.contact.subscribe((){ setState(() { }); });
     ChatViewModel.messages.subscribe((){ setState(() { }); });
     ChatViewModel.inputMessage.subscribe((){ setState(() { }); });
+    VideoCallViewModel.state.subscribe((){ setState(() { }); });
   }
+
 
   @override
   Widget build(BuildContext context) {
 
-    return ChatViewModel.isContactSelected ?
-      Column(children: [
+    if(!ChatViewModel.isContactSelected){
+      return chatNotSelected();
+    }
+
+    if(VideoCallViewModel.state.value == CallState.NormalTextChat){
+      return Column(children: [
         topBar(),
         Expanded(child: messageList()),
-        inputText()
-      ]) : chatNotSelected();
+        inputText(),
+      ]);
+    }
+
+    return Column(children: [
+      topBar(),
+      Expanded(child: VideoChatLayout()),
+    ]);
   }
 
   Widget chatNotSelected(){
@@ -66,6 +81,7 @@ class ChatLayoutState extends State<ChatLayout> {
             ),
             onTap: (){
               ChatViewModel.unSelectContact();
+              VideoCallViewModel.state.value = CallState.NormalTextChat;
             },
           ),
 
@@ -80,11 +96,22 @@ class ChatLayoutState extends State<ChatLayout> {
 
           GestureDetector(
             child:Image.asset(
-              "assets/three_dots.png",
+              (VideoCallViewModel.state.value==CallState.NormalTextChat) ? "assets/videocam.png" : "assets/disable_videocam.png",
               width: AppSizes.fontLarge,
               height: AppSizes.fontLarge,
             ),
             onTap: (){
+              if(VideoCallViewModel.state.value==CallState.NormalTextChat){
+                PeerToPeerConnection.openUserMedia();
+                VideoCallViewModel.state.value = CallState.JustLocalCamera;
+              }else{
+                VideoCallViewModel
+                    .localRenderer
+                    ?.srcObject
+                    ?.getTracks()
+                    .forEach((element) { element.stop(); });
+                VideoCallViewModel.state.value = CallState.NormalTextChat;
+              }
               // TODO
             },
           ),

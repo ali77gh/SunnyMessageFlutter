@@ -2,7 +2,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_client/model/contact.dart';
 import 'package:flutter_client/repo/local/message_repo.dart';
-import 'package:flutter_client/tools/obsarvable.dart';
+import 'package:flutter_client/tools/observable.dart';
 
 import '../model/message.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter_client/model/contact.dart';
-import 'package:flutter_client/tools/obsarvable.dart';
+import 'package:flutter_client/tools/observable.dart';
 import 'package:flutter_client/view_model/contact_view_model.dart';
 import 'package:uuid/uuid.dart';
 

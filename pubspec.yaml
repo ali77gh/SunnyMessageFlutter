@@ -37,6 +37,7 @@ dependencies:
   web_socket_channel: ^2.2.0
   uuid: ^3.0.6
   shared_preferences: ^2.0.15
+  flutter_webrtc: ^0.8.11
 
 dev_dependencies:
   flutter_test:

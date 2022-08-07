@@ -7,7 +7,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 class WebSocketService{
 
-  static const SERVER_ADDRESS = "ws://127.0.0.1:3000/";
+  static const SERVER_ADDRESS = "ws://192.168.226.193:3000/";
   static const RECONNECT_TIME = 1000;
 
   static WebSocketChannel? channel;
@@ -54,47 +54,73 @@ class WebSocketService{
         isRegister = true;
       }
 
-
-      //TODO test publish() and check if other side get packet
     });
   }
 
+  // ----------- send -----------
   static send(String data){
     channel?.sink.add(data);
   }
+
   static sendJson(dynamic data){
     send(jsonEncode(data));
   }
 
-  static onMessage(dynamic msg){
-    if(msg["action"]==null) return;
-
-      switch(msg["action"]){
-        case "online_status":
-          ContactViewModel.setOnlineStatus(msg["room_id"], msg["is_online"]);
-          break;
-        case "error":
-          //read "message" string //TODO Toast error
-          break;
-      }
-  }
-
   static sendJoin(List<String> roomIds){
     sendJson(
-      {
-        "action":"join",
-        "rooms":roomIds
-      }
+        {
+          "action":"join",
+          "rooms":roomIds
+        }
     );
   }
 
   static publish(String roomId, dynamic data){
-    sendJson(
-        {
-          "action":"publish",
-          "room_id":roomId,
-          "data":data
-        }
-    );
+    sendJson({
+      "action": "publish",
+      "room_id": roomId,
+      "data": data
+    });
+  }
+
+  static sendICE(dynamic ice){
+    var onlineFriends = ContactViewModel.contacts.value.where((element) => element.online);
+    for (var friend in onlineFriends) {
+      publish(friend.roomId, {
+        "action": "ice",
+        "ice": ice
+      });
+    }
+  }
+
+  // ----------- receive -----------
+  static onMessage(dynamic msg){
+    if(msg["action"]==null) return;
+
+      switch(msg["action"]){
+        case "online_status": onOnlineStatusRec(msg); break;
+        case "error": onErrRec(msg); break;
+        case "publish": onPublishRec(msg); break;
+      }
+  }
+
+  static onOnlineStatusRec(dynamic msg){
+    ContactViewModel.setOnlineStatus(msg["room_id"], msg["is_online"]);
+  }
+
+  static onErrRec(dynamic msg){
+    print("incoming err message: " + msg["message"]);
+    // TODO read "message" string Toast error
+  }
+
+  static onPublishRec(dynamic msg){
+    var data = msg["data"];
+    switch(data["action"]){
+      case "ice": onICE(msg["roomId"], data["ice"]); break;
+    }
+  }
+
+  static onICE(String roomId, dynamic data){
+
   }
 }
