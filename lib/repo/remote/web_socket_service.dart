@@ -2,12 +2,13 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter_client/repo/remote/peer_to_peer_connection.dart';
 import 'package:flutter_client/view_model/contact_view_model.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class WebSocketService{
 
-  static const SERVER_ADDRESS = "ws://192.168.226.193:3000/";
+  static const SERVER_ADDRESS = "ws://192.168.114.194:3000/";
   static const RECONNECT_TIME = 1000;
 
   static WebSocketChannel? channel;
@@ -83,14 +84,32 @@ class WebSocketService{
     });
   }
 
-  static sendICE(dynamic ice){
-    var onlineFriends = ContactViewModel.contacts.value.where((element) => element.online);
-    for (var friend in onlineFriends) {
-      publish(friend.roomId, {
-        "action": "ice",
-        "ice": ice
-      });
-    }
+  static publishICE(String roomId,dynamic ice){
+    publish(roomId, {
+      "action": "ice",
+      "ice": ice
+    });
+  }
+
+  static publishOffer(String roomId, dynamic offer){
+    publish(roomId, {
+      "action": "offer",
+      "offer": offer
+    });
+  }
+  
+  static publishAnswer(String roomId, dynamic answer){
+    publish(roomId, {
+      "action": "answer",
+      "answer": answer
+    });
+  }
+
+  static publishMessage(String roomId, dynamic message){
+    publish(roomId, {
+      "action": "answer",
+      "answer": message
+    });
   }
 
   // ----------- receive -----------
@@ -117,10 +136,26 @@ class WebSocketService{
     var data = msg["data"];
     switch(data["action"]){
       case "ice": onICE(msg["roomId"], data["ice"]); break;
+      case "offer": onICE(msg["roomId"], data["offer"]); break;
+      case "answer": onAnswer(msg["roomId"], data["answer"]); break;
+      case "text-message": onTextMessage(msg["roomId"], data["text-message"]); break;
     }
   }
 
   static onICE(String roomId, dynamic data){
+    PeerToPeerConnection.onICEReceive(data);
+  }
+
+  static onOffer(String roomId, dynamic data){
+    //Play ring
+    PeerToPeerConnection.onOfferReceive(data);
+  }
+  
+  static onAnswer(String roomId, dynamic data){
+    PeerToPeerConnection.onAnswerReceive(data);
+  }
+
+  static onTextMessage(String roomId, dynamic data){
 
   }
 }

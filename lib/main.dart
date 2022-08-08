@@ -7,6 +7,8 @@ import 'package:flutter_client/view/main_layout.dart';
 import 'package:flutter_client/view_model/contact_view_model.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized(); // fix shared preferences
+
   // start services here
 
   //web socket service

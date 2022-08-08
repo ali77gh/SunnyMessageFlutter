@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_client/repo/remote/peer_to_peer_connection.dart';
 import 'package:flutter_client/view/app_size.dart';
 import 'package:flutter_client/view/app_theme.dart';
 import 'package:flutter_client/view_model/video_call_view_model.dart';
@@ -52,7 +53,7 @@ class VideoChatLayoutState extends State<VideoChatLayout> {
                   VideoCallViewModel.state.value == CallState.Calling
               ) {
                 VideoCallViewModel.state.value = CallState.NormalTextChat;
-                //TODO end call
+                PeerToPeerConnection.hangUp();
               }else if(VideoCallViewModel.state.value == CallState.JustLocalCamera){
                 VideoCallViewModel.state.value = CallState.Calling;
                 //TODO make connection and get stream
@@ -72,16 +73,12 @@ class VideoChatLayoutState extends State<VideoChatLayout> {
     VideoCallViewModel.localRenderer!.initialize();
     VideoCallViewModel.remoteRenderer!.initialize();
 
-    // signaling.onAddRemoteStream = ((stream) {
-    //   _remoteRenderer.srcObject = stream;
-    //   setState(() {});
-    // });
-
     super.initState();
   }
 
   @override
   void dispose() {
+    PeerToPeerConnection.hangUp();
     VideoCallViewModel.localRenderer!.dispose();
     VideoCallViewModel.remoteRenderer!.dispose();
     super.dispose();

@@ -81,6 +81,7 @@ class ChatLayoutState extends State<ChatLayout> {
             ),
             onTap: (){
               ChatViewModel.unSelectContact();
+              PeerToPeerConnection.hangUp();
               VideoCallViewModel.state.value = CallState.NormalTextChat;
             },
           ),
@@ -101,7 +102,7 @@ class ChatLayoutState extends State<ChatLayout> {
               height: AppSizes.fontLarge,
             ),
             onTap: (){
-              if(VideoCallViewModel.state.value==CallState.NormalTextChat){
+              if(VideoCallViewModel.state.value == CallState.NormalTextChat){
                 PeerToPeerConnection.openUserMedia();
                 VideoCallViewModel.state.value = CallState.JustLocalCamera;
               }else{
@@ -111,6 +112,7 @@ class ChatLayoutState extends State<ChatLayout> {
                     ?.getTracks()
                     .forEach((element) { element.stop(); });
                 VideoCallViewModel.state.value = CallState.NormalTextChat;
+                PeerToPeerConnection.hangUp();
               }
               // TODO
             },

@@ -15,4 +15,19 @@ class VideoCallViewModel{
 
   static RTCVideoRenderer? localRenderer;
   static RTCVideoRenderer? remoteRenderer;
+  
+  // someone is calling
+  static var callerRoomId = Observable("");
+
+  static void clearCaller(){
+    callerRoomId.value = "";
+  }
+
+  static bool isSomeoneCalling(){
+    return callerRoomId.value != "";
+  }
+
+  static acceptCall(){
+
+  }
 }
