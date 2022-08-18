@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_client/view/app_theme.dart';
+import 'package:flutter_client/view/common/incoming_call_layout.dart';
 import 'package:flutter_client/view/desktop/main_desktop_layout.dart';
 import 'package:flutter_client/view/mobile/main_mobile_layout.dart';
 
@@ -19,10 +20,13 @@ class MainLayoutState extends State<MainLayout> {
     return Material(
         type: MaterialType.transparency,
         child: SafeArea(
-            child: Container(
-              color: AppTheme.background,
-              child: AppSizes.isMobile ? MainMobileLayout() : MainDesktopLayout(),
-            )
+            child: Stack(children: [
+              Container(
+                color: AppTheme.background,
+                child: AppSizes.isMobile ? MainMobileLayout() : MainDesktopLayout(),
+              ),
+              IncomingCallLayout()
+            ],)
         )
     );
   }

@@ -8,7 +8,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 class WebSocketService{
 
-  static const SERVER_ADDRESS = "ws://192.168.114.194:3000/";
+  static const SERVER_ADDRESS = "wss://signaling.sunnymessage.ir/";
   static const RECONNECT_TIME = 1000;
 
   static WebSocketChannel? channel;
@@ -77,6 +77,14 @@ class WebSocketService{
   }
 
   static publish(String roomId, dynamic data){
+
+    print("onPublish:");
+    print({
+      "action": "publish",
+      "room_id": roomId,
+      "data": data
+    });
+    print("----------");
     sendJson({
       "action": "publish",
       "room_id": roomId,
@@ -114,6 +122,10 @@ class WebSocketService{
 
   // ----------- receive -----------
   static onMessage(dynamic msg){
+    print("onMessage:");
+    print(msg);
+    print("----------");
+
     if(msg["action"]==null) return;
 
       switch(msg["action"]){
@@ -136,19 +148,20 @@ class WebSocketService{
     var data = msg["data"];
     switch(data["action"]){
       case "ice": onICE(msg["roomId"], data["ice"]); break;
-      case "offer": onICE(msg["roomId"], data["offer"]); break;
+      case "offer": onOffer(msg["roomId"], data["offer"]); break;
       case "answer": onAnswer(msg["roomId"], data["answer"]); break;
       case "text-message": onTextMessage(msg["roomId"], data["text-message"]); break;
     }
   }
 
   static onICE(String roomId, dynamic data){
+    print("-----------------------onICE");
     PeerToPeerConnection.onICEReceive(data);
   }
 
   static onOffer(String roomId, dynamic data){
     //Play ring
-    PeerToPeerConnection.onOfferReceive(data);
+    PeerToPeerConnection.onOfferReceive(roomId,data);
   }
   
   static onAnswer(String roomId, dynamic data){

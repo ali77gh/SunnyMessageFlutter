@@ -18,6 +18,17 @@ class VideoChatLayoutState extends State<VideoChatLayout> {
   }
 
   @override
+  void initState() {
+    VideoCallViewModel.localRenderer = RTCVideoRenderer();
+    VideoCallViewModel.localRenderer!.initialize();
+
+    VideoCallViewModel.remoteRenderer = RTCVideoRenderer();
+    VideoCallViewModel.remoteRenderer!.initialize();
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var children = [
       Expanded(
@@ -31,7 +42,8 @@ class VideoChatLayoutState extends State<VideoChatLayout> {
                 color: AppTheme.text_sharp,
                 child: RTCVideoView(VideoCallViewModel.remoteRenderer!)
             ),
-            if(VideoCallViewModel.state.value == CallState.Calling) const Text("Calling...",style: TextStyle(color: AppTheme.background_2),)
+            if(VideoCallViewModel.state.value == CallState.Calling)
+              const Text("Calling...", style: TextStyle(color: AppTheme.background_2))
           ],
         ) ,
       ),
@@ -56,7 +68,7 @@ class VideoChatLayoutState extends State<VideoChatLayout> {
                 PeerToPeerConnection.hangUp();
               }else if(VideoCallViewModel.state.value == CallState.JustLocalCamera){
                 VideoCallViewModel.state.value = CallState.Calling;
-                //TODO make connection and get stream
+                PeerToPeerConnection.call();
               }
             },
           )
@@ -66,15 +78,6 @@ class VideoChatLayoutState extends State<VideoChatLayout> {
     return AppSizes.isMobile ? Column(children: children,) : Row(children: children,);
   }
 
-  @override
-  void initState() {
-    VideoCallViewModel.localRenderer = RTCVideoRenderer();
-    VideoCallViewModel.remoteRenderer = RTCVideoRenderer();
-    VideoCallViewModel.localRenderer!.initialize();
-    VideoCallViewModel.remoteRenderer!.initialize();
-
-    super.initState();
-  }
 
   @override
   void dispose() {

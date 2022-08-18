@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter_client/repo/remote/web_socket_service.dart';
 import 'package:flutter_client/view_model/chat_view_model.dart';
@@ -35,7 +34,7 @@ class PeerToPeerConnection{
     // send ICE
     peerConnection?.onIceCandidate = (RTCIceCandidate candidate) {
       print('Got candidate: ${candidate.toMap()}');
-      WebSocketService.publish(ChatViewModel.contact.value!.roomId, candidate.toMap());
+      WebSocketService.publishICE(ChatViewModel.contact.value!.roomId, candidate.toMap());
     };
 
     // send Offer
@@ -58,6 +57,7 @@ class PeerToPeerConnection{
 
   static answer() async {
 
+    await openUserMedia();
     print('Create PeerConnection with configuration: $configuration');
     peerConnection = await createPeerConnection(configuration);
 
@@ -70,8 +70,9 @@ class PeerToPeerConnection{
     // send ICE
     peerConnection!.onIceCandidate = (RTCIceCandidate candidate) {
       print('onIceCandidate: ${candidate.toMap()}');
-      WebSocketService.publish(ChatViewModel.contact.value!.roomId, candidate.toMap());
+      WebSocketService.publishICE(ChatViewModel.contact.value!.roomId, candidate.toMap());
     };
+
 
     // on track receive
     peerConnection?.onTrack = (RTCTrackEvent event) {
@@ -96,26 +97,35 @@ class PeerToPeerConnection{
       'answer': { 'type': answer.type, 'sdp': answer.sdp }
     };
     WebSocketService.publishAnswer(ChatViewModel.contact.value!.roomId, roomWithAnswer);
+
+    // add remote canicdates
+    for(var ice in remoteICEs){
+      peerConnection!.addCandidate(
+        RTCIceCandidate(
+          ice['candidate'],
+          ice['sdpMid'],
+          ice['sdpMLineIndex'],
+        ),
+      );
+    }
+
     offerBuffer = null;
+    remoteICEs.clear();
   }
 
+  static List<Map<String,dynamic>> remoteICEs = [];
   static onICEReceive(Map<String,dynamic> data){
-    print('Got new remote ICE candidate: ${jsonEncode(data)}');
-    peerConnection!.addCandidate(
-      RTCIceCandidate(
-        data['candidate'],
-        data['sdpMid'],
-        data['sdpMLineIndex'],
-      ),
-    );
+    remoteICEs.add(data);
   }
 
   static Map<String,dynamic>? offerBuffer;
-  static onOfferReceive(Map<String, dynamic> data){
+  static onOfferReceive(String roomId, Map<String, dynamic> data){
     offerBuffer = data;
+    VideoCallViewModel.onCallComes(roomId);
   }
 
   static onAnswerReceive(Map<String, dynamic> data) async {
+
       if (peerConnection?.getRemoteDescription() != null &&
           data['answer'] != null) {
         var answer = RTCSessionDescription(
@@ -125,24 +135,31 @@ class PeerToPeerConnection{
 
         print("Someone tried to connect");
         await peerConnection?.setRemoteDescription(answer);
+        VideoCallViewModel.state.value = CallState.InCall;
+
       }
   }
 
   static Future<void> openUserMedia() async {
+
+    if(localStream!=null) return;
+
     var stream = await navigator.mediaDevices
-        .getUserMedia({'video': true, 'audio': false}); // TODO check this if sound not working
+        .getUserMedia({'video': true, 'audio': false }); // TODO check this if sound not working
 
     await Future.delayed(const Duration(milliseconds: 1000));
     VideoCallViewModel.localRenderer!.srcObject = stream;
     localStream = stream;
 
-    VideoCallViewModel.remoteRenderer!.srcObject = await createLocalMediaStream('key');
+    // await Future.delayed(const Duration(milliseconds: 15000));
+    // VideoCallViewModel.remoteRenderer!.srcObject = await createLocalMediaStream('key');
 
-    await Future.delayed(const Duration(milliseconds: 1000));
-    VideoCallViewModel.localRenderer!.notifyListeners();
+    // VideoCallViewModel.localRenderer!.notifyListeners();
   }
 
   static Future<void> hangUp() async {
+
+    // send hangup signal
     VideoCallViewModel.localRenderer!.srcObject!.getTracks()
         .forEach((track) {
       track.stop();
@@ -168,16 +185,14 @@ class PeerToPeerConnection{
 
     peerConnection?.onSignalingState = (RTCSignalingState state) {
       print('Signaling state change: $state');
-    };
-
-    peerConnection?.onIceGatheringState = (RTCIceGatheringState state) {
-      print('ICE connection state change: $state');
+      if(state==RTCPeerConnectionState.RTCPeerConnectionStateClosed){
+        VideoCallViewModel.state.value = CallState.NormalTextChat;
+      }
     };
 
     peerConnection?.onAddStream = (MediaStream stream) {
       print("Add remote stream");
-      VideoCallViewModel.localRenderer!.srcObject = stream;
-      remoteStream = stream;
+      VideoCallViewModel.remoteRenderer!.srcObject = stream;
     };
   }
 }
