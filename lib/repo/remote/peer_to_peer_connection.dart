@@ -145,16 +145,11 @@ class PeerToPeerConnection{
     if(localStream!=null) return;
 
     var stream = await navigator.mediaDevices
-        .getUserMedia({'video': true, 'audio': false }); // TODO check this if sound not working
+        .getUserMedia({'video': true, 'audio': true });
 
     await Future.delayed(const Duration(milliseconds: 1000));
     VideoCallViewModel.localRenderer!.srcObject = stream;
     localStream = stream;
-
-    // await Future.delayed(const Duration(milliseconds: 15000));
-    // VideoCallViewModel.remoteRenderer!.srcObject = await createLocalMediaStream('key');
-
-    // VideoCallViewModel.localRenderer!.notifyListeners();
   }
 
   static Future<void> hangUp() async {
