@@ -70,7 +70,6 @@ class VideoChatLayoutState extends State<VideoChatLayout> {
     return AppSizes.isMobile ? Column(children: children,) : Row(children: children,);
   }
 
-
   @override
   void dispose() {
     PeerToPeerConnection.hangUp();

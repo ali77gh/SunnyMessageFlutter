@@ -66,7 +66,7 @@ class ContactListLayoutState extends State<ContactListLayout> {
   Widget list(){
     return Expanded(
       child: ListView(
-        children: ContactViewModel.sorted_contacts.map((e) => listItem(e)).toList(),
+        children: ContactViewModel.sortedContacts.map((e) => listItem(e)).toList(),
       ),
     );
   }

@@ -1,6 +1,7 @@
 
 import 'package:flutter_client/model/contact.dart';
 import 'package:flutter_client/repo/local/contact_repo.dart';
+import 'package:flutter_client/repo/remote/web_socket_service.dart';
 import 'package:flutter_client/tools/observable.dart';
 
 class ContactViewModel{
@@ -15,6 +16,7 @@ class ContactViewModel{
     contacts.value.add(contact);
     contacts.notifyAll();
     ContactRepo.add(contact);
+    WebSocketService.sendJoin([contact.roomId]);
   }
 
   static void setOnlineStatus(String roomId,bool status){
@@ -22,7 +24,7 @@ class ContactViewModel{
     contacts.notifyAll();
   }
 
-  static List<Contact> get sorted_contacts{
+  static List<Contact> get sortedContacts{
     return contacts.value; // TODO sort by last message time
   }
 
@@ -32,7 +34,6 @@ class ContactViewModel{
     contacts.notifyAll();
     ContactRepo.update(contact);
   }
-
 
   static void remove(String contactId){
     contacts.value.where((element) => element.roomId != contactId);
