@@ -142,7 +142,7 @@ class PeerToPeerConnection{
 
   static Future<void> openUserMedia() async {
 
-    if(localStream!=null) return;
+    // if(localStream!=null) return;
 
     var stream = await navigator.mediaDevices
         .getUserMedia({'video': true, 'audio': true });
@@ -189,5 +189,6 @@ class PeerToPeerConnection{
       print("Add remote stream");
       VideoCallViewModel.remoteRenderer!.srcObject = stream;
     };
+
   }
 }

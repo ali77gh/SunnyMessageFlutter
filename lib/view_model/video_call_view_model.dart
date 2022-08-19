@@ -18,11 +18,22 @@ class VideoCallViewModel{
 
   static RTCVideoRenderer? localRenderer;
   static RTCVideoRenderer? remoteRenderer;
-  
+
+  static initializeRenderers(){
+    if(localRenderer==null){
+      localRenderer = RTCVideoRenderer();
+      localRenderer!.initialize();
+    }
+    if(remoteRenderer == null){
+      remoteRenderer = RTCVideoRenderer();
+      remoteRenderer!.initialize();
+    }
+  }
+
   // someone is calling
   static var callerRoomId = Observable("");
 
-  static String callerName(){
+  static get callerName{
     for(var contact in ContactViewModel.contacts.value){
       if(contact.roomId==callerRoomId.value) return contact.name;
     }

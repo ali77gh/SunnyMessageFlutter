@@ -18,18 +18,10 @@ class VideoChatLayoutState extends State<VideoChatLayout> {
   }
 
   @override
-  void initState() {
-    VideoCallViewModel.localRenderer = RTCVideoRenderer();
-    VideoCallViewModel.localRenderer!.initialize();
-
-    VideoCallViewModel.remoteRenderer = RTCVideoRenderer();
-    VideoCallViewModel.remoteRenderer!.initialize();
-
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+
+    VideoCallViewModel.initializeRenderers();
+
     var children = [
       Expanded(
         child: RTCVideoView(VideoCallViewModel.localRenderer!, mirror: true) ,

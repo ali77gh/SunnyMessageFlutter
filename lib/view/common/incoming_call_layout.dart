@@ -27,7 +27,7 @@ class IncomingCallLayoutState extends State<IncomingCallLayout> {
           children: [
             const Spacer(),
             Text(
-              "${VideoCallViewModel.callerName()} is calling you...",
+              "${VideoCallViewModel.callerName} is calling you...",
               style: TextStyle(fontSize: AppSizes.fontLarge,color: Colors.white),
             ),
             const Spacer(),

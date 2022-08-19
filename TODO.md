@@ -1,13 +1,18 @@
 
-[x] add voice stream
-[ ] fix camera not work after hanup
-[ ] show online status of contact on add without need to refresh 
-[ ] text chat:
-	[ ] send and receive 
-	[ ] save in local storage
-	[ ] add unread flag
-[ ] improve room empty logic on websocket server part
-[ ] send link for friend and 
-[ ] add logo
-[ ] PWA
-[ ] add landing page
+[x] Add voice stream
+[x] Fix camera not work after hanup
+[ ] Show online status of contact on add without need to refresh 
+[ ] Text chat:
+	[ ] Send and receive 
+	[ ] Save in local storage
+	[ ] Add unread flag
+	[ ] Message is readed flag
+[ ] Send email
+
+[ ] Add copy and paste button for roomId
+[ ] Inputs goes up while keyboard is active
+[ ] Send link to friend not roomId
+[ ] Improve room empty logic on websocket server part
+[ ] Add logo
+[ ] PWA stuff like logo and app name
+[ ] Landing page
