@@ -2,9 +2,9 @@
 [x] Add voice stream
 [x] Fix camera not work after hanup
 [x] Show online status of contact on add without need to refresh 
-[ ] Text chat:
-	[ ] Send and receive 
-	[ ] Save in local storage
+[x] Text chat:
+	[x] Send and receive 
+	[x] Save in local storage
 	[ ] Add unread flag
 	[ ] Message is readed flag
 [ ] Send email

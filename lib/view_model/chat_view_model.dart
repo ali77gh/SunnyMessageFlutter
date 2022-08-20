@@ -2,6 +2,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_client/model/contact.dart';
 import 'package:flutter_client/repo/local/message_repo.dart';
+import 'package:flutter_client/repo/remote/web_socket_service.dart';
 import 'package:flutter_client/tools/observable.dart';
 
 import '../model/message.dart';
@@ -25,21 +26,27 @@ class ChatViewModel{
     if(inputMessage.value == "") return; // TODO validate and disable and enable send button
 
     var msg = Message(inputMessage.value, DateTime.now().millisecondsSinceEpoch, false, true);
+    WebSocketService.publishMessage(ChatViewModel.contact.value!.roomId, inputMessage.value);
     messages.value.add(msg);
     messages.notifyAll();
     inputMessage.value = "";
     tec.clear();
-    // TODO send with Webrtc
     MessageRepo.add(contact.value!.roomId, msg);
   }
 
   /*
   * call from Messaging Service
   * */
-  static void onNewMessage(Message message){
-    messages.value.add(message);
+  static void onNewMessage(String roomId, String message){
+    var msg = Message(message, DateTime.now().millisecondsSinceEpoch, true, false);
+    MessageRepo.add(roomId, msg);
+    print("roomId:$roomId content:${msg.content}");
+
+    if(contact.value==null){ return; }
+    if(roomId != contact.value!.roomId){ return; }
+
+    messages.value.add(msg);
     messages.notifyAll();
-    MessageRepo.add(contact.value!.roomId, message);
   }
 
   static void load(Contact contact){

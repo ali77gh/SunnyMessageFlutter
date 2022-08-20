@@ -1,5 +1,4 @@
 
-
 import 'dart:convert';
 
 class Contact{
@@ -26,6 +25,6 @@ class Contact{
   }
 
   static List<Contact> parseList(String string){
-  return (jsonDecode(string) as List<dynamic>).map((e) => parse(e)).toList();
+    return (jsonDecode(string) as List<dynamic>).map((e) => parse(e)).toList();
   }
 }

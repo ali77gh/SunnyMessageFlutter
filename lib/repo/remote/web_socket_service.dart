@@ -2,7 +2,9 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter_client/model/message.dart';
 import 'package:flutter_client/repo/remote/peer_to_peer_connection.dart';
+import 'package:flutter_client/view_model/chat_view_model.dart';
 import 'package:flutter_client/view_model/contact_view_model.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -113,10 +115,10 @@ class WebSocketService{
     });
   }
 
-  static publishMessage(String roomId, dynamic message){
+  static publishMessage(String roomId, String message){
     publish(roomId, {
-      "action": "answer",
-      "answer": message
+      "action": "text-message",
+      "text-message": message
     });
   }
 
@@ -168,7 +170,7 @@ class WebSocketService{
     PeerToPeerConnection.onAnswerReceive(data);
   }
 
-  static onTextMessage(String roomId, dynamic data){
-
+  static onTextMessage(String roomId, String data){
+    ChatViewModel.onNewMessage(roomId, data);
   }
 }
