@@ -1,16 +1,30 @@
-# flutter_client
+# SunnyMessage
 
-Peer to Peer Messaging App.
+<img src="screenshots/Logo.png" height="200"><br>
+This messanger app is not could base, so its sunny🙂.<br>
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+This app use WebRTC to make Peer to Peer connection between clients.<br>
 
-A few resources to get you started if this is your first Flutter project:
+This project is <b>not</b> using Firebase for signaling and use a simple node js backend which is also open source.
+[link](https://github.com/ali77gh/SunnyMessageNodejs)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+<br>
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### How it works
+<img src="screenshots/WebRTC.png" height="200">
+<br><br>
+
+## ScreenShots
+
+### Text Chat:
+<img src="screenshots/TextChat.png" height="300">
+<img src="screenshots/Contacts.png" height="300">
+<br><br>
+
+
+### Video Call:
+
+<img src="screenshots/IncomingCall.png" height="300"><br>
+<img src="screenshots/VideoCallDesktop.png" height="300">
+<img src="screenshots/VideoCallMobile.png" height="300"><br>
